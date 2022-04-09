@@ -33,3 +33,11 @@ def add_player(db: Session, event_id: int, player: schemas.NewPlayer):
     db.add(db_player)
     db.commit()
     db.refresh(db_player)
+
+
+def add_team_nr_to_player(db: Session, player_id: int, team_nr: int):
+    db_player = db.query(models.Player).filter(models.Player.id == player_id).first()
+    db_player.team_nr = team_nr
+    db.add(db_player)
+    db.commit()
+    db.refresh(db_player)
