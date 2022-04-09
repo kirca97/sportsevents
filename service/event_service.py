@@ -6,11 +6,6 @@ from sqlalchemy.orm import Session
 from repository import crud_event, crud_sport
 from schema import schemas
 
-FOOTBALL_PLAYERS = 12
-BASKETBALL_PLAYERS = 6
-BASKETBALL_PLAYERS_ALTERNATIVE = 9
-VOLLEYBALL_PLAYERS = 12
-
 
 def get_events(db: Session):
     events = crud_event.get_events(db=db)
@@ -46,7 +41,7 @@ def shuffle_players(event_id: int, db: Session):
         raise HTTPException(status_code=404, detail="Event not found!")
 
     players_number = len(db_event.players)
-    participants_number = FOOTBALL_PLAYERS  # todo: change this with database field
+    participants_number = db_event.sport.participants_number
     if players_number != participants_number:
         raise HTTPException(status_code=400, detail="Shuffle not possible!")
 
@@ -59,4 +54,5 @@ def shuffle_players(event_id: int, db: Session):
             team_nr = 2
         crud_event.add_team_nr_to_player(db=db, player_id=player.id, team_nr=team_nr)
 
+    crud_event.add_teams_created_true(db=db, event_id=db_event.id)
     return db_event

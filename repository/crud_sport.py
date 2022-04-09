@@ -17,7 +17,7 @@ def get_sport_by_id(db: Session, id: int):
 
 
 def create_sport(db: Session, sport: schemas.SportBase):
-    db_sport = models.Sport(title=sport.title)
+    db_sport = models.Sport(title=sport.title, participants_number=sport.participants_number)
     db.add(db_sport)
     db.commit()
     db.refresh(db_sport)

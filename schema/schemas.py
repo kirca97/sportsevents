@@ -3,6 +3,7 @@ from pydantic import BaseModel
 
 class SportBase(BaseModel):
     title: str
+    participants_number: int
 
 
 class Sport(SportBase):
@@ -14,7 +15,7 @@ class Sport(SportBase):
 
 class PlayerBase(BaseModel):
     name: str
-    email: str
+    email: str | None
     event_id: int
 
 
@@ -38,6 +39,7 @@ class EventBase(BaseModel):
 
 class Event(EventBase):
     id: int
+    teams_created: bool
     players: list[Player] = []
 
     class Config:
