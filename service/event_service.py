@@ -56,3 +56,24 @@ def shuffle_players(event_id: int, db: Session):
 
     crud_event.add_teams_created_true(db=db, event_id=db_event.id)
     return db_event
+
+
+def swap_players(event_id: int, player_swap: schemas.PlayerSwap, db: Session):
+    db_event = crud_event.get_event_by_id(db=db, event_id=event_id)
+    if not db_event:
+        raise HTTPException(status_code=404, detail="Event not found!")
+
+    player_one = crud_event.get_player_by_id(db=db, player_id=player_swap.player_one_id)
+    player_two = crud_event.get_player_by_id(db=db, player_id=player_swap.player_two_id)
+
+    if not player_one or not player_two:
+        raise HTTPException(status_code=404, detail="One of the players not found!")
+
+    if player_one.team_nr == player_two.team_nr:
+        raise HTTPException(status_code=400, detail="Players are in the same team!")
+
+    temp_team_nr = player_one.team_nr
+    crud_event.add_team_nr_to_player(db=db, player_id=player_swap.player_one_id, team_nr=player_two.team_nr)
+    crud_event.add_team_nr_to_player(db=db, player_id=player_swap.player_two_id, team_nr=temp_team_nr)
+
+    return db_event

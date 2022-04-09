@@ -63,3 +63,8 @@ def edit_event(event_id: int, edited_event: schemas.EditEvent, db: Session = Dep
 @app.get("/events/{event_id}/shuffle", response_model=schemas.Event)
 def shuffle_players(event_id: int, db: Session = Depends(get_db)):
     return event_service.shuffle_players(event_id=event_id, db=db)
+
+
+@app.post("/events/{event_id}/swap", response_model=schemas.Event)
+def swap_players(event_id: int, player_swap: schemas.PlayerSwap, db: Session = Depends(get_db)):
+    return event_service.swap_players(event_id=event_id, player_swap=player_swap, db=db)

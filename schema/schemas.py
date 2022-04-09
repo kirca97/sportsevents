@@ -49,3 +49,8 @@ class Event(EventBase):
 class EditEvent(BaseModel):
     title: str = None
     players: list[NewPlayer]
+
+
+class PlayerSwap(BaseModel):
+    player_one_id: int
+    player_two_id: int

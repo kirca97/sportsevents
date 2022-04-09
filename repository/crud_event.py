@@ -49,3 +49,7 @@ def add_teams_created_true(db: Session, event_id: int):
     db.add(db_event)
     db.commit()
     db.refresh(db_event)
+
+
+def get_player_by_id(db: Session, player_id: int):
+    return db.query(models.Player).filter(models.Player.id == player_id).first()
