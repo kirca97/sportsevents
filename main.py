@@ -35,21 +35,26 @@ def get_db():
         db.close()
 
 
-@app.get("/sports/", response_model=List[schemas.Sport])
+@app.get("/sports", response_model=List[schemas.Sport])
 def get_sports(db: Session = Depends(get_db)):
     return sport_service.get_sports(db=db)
 
 
-@app.post("/sports/", response_model=schemas.Sport)
+@app.post("/sports", response_model=schemas.Sport)
 def create_sport(sport: schemas.SportBase, db: Session = Depends(get_db)):
     return sport_service.create_sport(db=db, sport=sport)
 
 
-@app.get("/events/", response_model=List[schemas.EventDTO])
+@app.get("/events", response_model=List[schemas.Event])
 def get_events(db: Session = Depends(get_db)):
     return event_service.get_events(db=db)
 
 
-@app.post("/events/", response_model=schemas.EventDTO)
+@app.post("/events", response_model=schemas.Event)
 def create_event(event: schemas.EventBase, db: Session = Depends(get_db)):
     return event_service.create_event(db=db, event=event)
+
+
+@app.patch("/events/{event_id}", response_model=schemas.Event)
+def edit_event(event_id: int, edited_event: schemas.EditEvent, db: Session = Depends(get_db)):
+    return event_service.edit_event(event_id=event_id, edited_event=edited_event, db=db)

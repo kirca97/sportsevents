@@ -29,7 +29,7 @@ class Player(Base):
 
     id = Column(Integer, primary_key=True, index=True)
     name = Column(String)
-    email = Column(String, unique=True, index=True)
+    email = Column(String, index=True)
     team_nr = Column(Integer)
     event_id = Column(Integer, ForeignKey("event.id"))
 
