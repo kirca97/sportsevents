@@ -1,7 +1,7 @@
 from sqlalchemy import Column, ForeignKey, Integer, String
 from sqlalchemy.orm import relationship
 
-from .database import Base
+from config.database import Base
 
 
 class Sport(Base):
@@ -21,6 +21,7 @@ class Event(Base):
     sport_id = Column(Integer, ForeignKey("sport.id"))
 
     sport = relationship("Sport", back_populates="events")
+    players = relationship("Player", back_populates="event")
 
 
 class Player(Base):
@@ -32,4 +33,4 @@ class Player(Base):
     team_nr = Column(Integer)
     event_id = Column(Integer, ForeignKey("event.id"))
 
-    event = relationship("Event")
+    event = relationship("Event", back_populates="players")

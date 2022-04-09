@@ -1,6 +1,7 @@
 from sqlalchemy.orm import Session
 
-from . import models, schemas
+from model import models
+from schema import schemas
 
 
 def get_sports(db: Session, skip: int = 0, limit: int = 100):
@@ -9,6 +10,10 @@ def get_sports(db: Session, skip: int = 0, limit: int = 100):
 
 def get_sport_by_title(db: Session, title: str):
     return db.query(models.Sport).filter(models.Sport.title == title).first()
+
+
+def get_sport_by_id(db: Session, id: int):
+    return db.query(models.Sport).filter(models.Sport.id == id).first()
 
 
 def create_sport(db: Session, sport: schemas.SportBase):

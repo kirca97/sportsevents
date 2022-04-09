@@ -1,11 +1,13 @@
 from typing import List
 
-from fastapi import Depends, FastAPI, HTTPException
+from fastapi import Depends, FastAPI
 from fastapi.middleware.cors import CORSMiddleware
 from sqlalchemy.orm import Session
 
-from database import crud, models, schemas
-from database.database import SessionLocal, engine
+from config.database import SessionLocal, engine
+from model import models
+from schema import schemas
+from service import sport_service, event_service
 
 models.Base.metadata.create_all(bind=engine)
 
@@ -35,13 +37,19 @@ def get_db():
 
 @app.get("/sports/", response_model=List[schemas.Sport])
 def get_sports(db: Session = Depends(get_db)):
-    sports = crud.get_sports(db)
-    return sports
+    return sport_service.get_sports(db=db)
 
 
 @app.post("/sports/", response_model=schemas.Sport)
 def create_sport(sport: schemas.SportBase, db: Session = Depends(get_db)):
-    db_sport = crud.get_sport_by_title(db, title=sport.title)
-    if db_sport:
-        raise HTTPException(status_code=400, detail="Sport already exists!")
-    return crud.create_sport(db=db, sport=sport)
+    return sport_service.create_sport(db=db, sport=sport)
+
+
+@app.get("/events/", response_model=List[schemas.EventDTO])
+def get_events(db: Session = Depends(get_db)):
+    return event_service.get_events(db=db)
+
+
+@app.post("/events/", response_model=schemas.EventDTO)
+def create_event(event: schemas.EventBase, db: Session = Depends(get_db)):
+    return event_service.create_event(db=db, event=event)
