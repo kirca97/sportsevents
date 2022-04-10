@@ -68,3 +68,8 @@ def shuffle_players(event_id: int, db: Session = Depends(get_db)):
 @app.post("/events/{event_id}/swap", response_model=schemas.Event)
 def swap_players(event_id: int, player_swap: schemas.PlayerSwap, db: Session = Depends(get_db)):
     return event_service.swap_players(event_id=event_id, player_swap=player_swap, db=db)
+
+
+@app.delete("/events/{event_id}/players/{player_id}", response_model=schemas.Event)
+def remove_player(event_id: int, player_id: int, db: Session = Depends(get_db)):
+    return event_service.remove_player(event_id=event_id, player_id=player_id, db=db)

@@ -1,3 +1,4 @@
+from fastapi import HTTPException
 from sqlalchemy.orm import Session
 
 from model import models
@@ -53,3 +54,12 @@ def add_teams_created_true(db: Session, event_id: int):
 
 def get_player_by_id(db: Session, player_id: int):
     return db.query(models.Player).filter(models.Player.id == player_id).first()
+
+
+def remove_player_by_id(db: Session, player_id: int):
+    player = get_player_by_id(db=db, player_id=player_id)
+    if not player:
+        raise HTTPException(status_code=404, detail="Player not found!")
+
+    db.delete(player)
+    db.commit()

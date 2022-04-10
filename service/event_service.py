@@ -77,3 +77,15 @@ def swap_players(event_id: int, player_swap: schemas.PlayerSwap, db: Session):
     crud_event.add_team_nr_to_player(db=db, player_id=player_swap.player_two_id, team_nr=temp_team_nr)
 
     return db_event
+
+
+def remove_player(event_id: int, player_id: int, db: Session):
+    db_event = crud_event.get_event_by_id(db=db, event_id=event_id)
+    if not db_event:
+        raise HTTPException(status_code=404, detail="Event not found!")
+
+    if db_event.teams_created:
+        raise HTTPException(status_code=400, detail="Remove not possible!")
+
+    crud_event.remove_player_by_id(db=db, player_id=player_id)
+    return db_event
