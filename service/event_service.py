@@ -89,3 +89,12 @@ def remove_player(event_id: int, player_id: int, db: Session):
 
     crud_event.remove_player_by_id(db=db, player_id=player_id)
     return db_event
+
+
+def edit_player(event_id: int, player_id: int, edited_player: schemas.NewPlayer, db: Session):
+    db_event = crud_event.get_event_by_id(db=db, event_id=event_id)
+    if not db_event:
+        raise HTTPException(status_code=404, detail="Event not found!")
+
+    crud_event.edit_player(db=db, player_id=player_id, edited_player=edited_player)
+    return db_event

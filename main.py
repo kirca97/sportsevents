@@ -73,3 +73,8 @@ def swap_players(event_id: int, player_swap: schemas.PlayerSwap, db: Session = D
 @app.delete("/events/{event_id}/players/{player_id}", response_model=schemas.Event)
 def remove_player(event_id: int, player_id: int, db: Session = Depends(get_db)):
     return event_service.remove_player(event_id=event_id, player_id=player_id, db=db)
+
+
+@app.patch("/events/{event_id}/players/{player_id}", response_model=schemas.Event)
+def edit_player(event_id: int, player_id: int, edited_player: schemas.NewPlayer, db: Session = Depends(get_db)):
+    return event_service.edit_player(event_id=event_id, player_id=player_id, edited_player=edited_player, db=db)
